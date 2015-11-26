@@ -1,0 +1,11 @@
+[
+    {
+      "modid": "${__MOD_ID__}",
+      "name": "${__MOD_NAME__}",
+      "description": "Magic Wands that can perform commands on use.",
+      "version": "${__MOD_VER__}",
+      "mcversion": "${__MOD_MCVER__}",
+      "url": "http://rintaun.github.com/MagicWands/",
+      "authorList": ["rintaun"]
+    }
+]
