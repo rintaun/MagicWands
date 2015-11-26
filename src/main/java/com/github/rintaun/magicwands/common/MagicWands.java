@@ -2,11 +2,13 @@ package com.github.rintaun.magicwands.common;
 
 import com.github.rintaun.magicwands.common.item.ItemMagicWand;
 
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -21,6 +23,7 @@ public class MagicWands
     public static final String MOD_VER = "${__MOD_VER__}";
 
     public static Item magicWand = new ItemMagicWand();
+    public static KeyBinding wandEdit;
 
     @SidedProxy(
         clientSide = "com.github.rintaun.magicwands.client.ClientProxyWands",
