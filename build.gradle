@@ -1,10 +1,3 @@
-def modinfo = configure(new Properties()) {
-    __MOD_ID__    = "magicwands"
-    __MOD_NAME__  = "Magic Wands"
-    __MOD_VER__   = "0.1.0"
-    __MOD_MCVER__ = "1.8-11.14.3.1502"
-}
-
 buildscript {
     repositories {
         mavenCentral()
@@ -24,21 +17,30 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = modinfo.__MOD_VER__
-group= "com.github.rintaun.magicwands"
-archivesBaseName = "magicwands-1.8"
-
-ext.wrapKeys = { infoMap ->
+ext.wrapKeys = { map ->
     def newMap = [:]
-    infoMap.each { k, v ->
+    map.each { k, v ->
         def newk = '${'+k+'}'
         newMap[newk] = v
     }
     return newMap
 }
 
+def modprops = new Properties()
+file('mod.properties').withInputStream {
+    stream -> modprops.load(stream)
+}
+
+version = modprops.__MOD_VER__
+group= "com.github.rintaun.${modprops.__MOD_ID__}"
+archivesBaseName = "${modprops.__MOD_ID__}-${modprops.__MOD_MCVER__}"
+
+logger.quiet("Building ${modprops.__MOD_NAME__} v${version}")
+logger.quiet("  (${archivesBaseName}-${version}.jar)")
+logger.quiet("");
+
 minecraft {
-    version = modinfo.__MOD_MCVER__
+    version = modprops.__MOD_MCVER__ + '-' + modprops.__MOD_FORGEVER__
     runDir = "eclipse"
 
     mappings = "snapshot_20141130"
@@ -49,7 +51,7 @@ dependencies {
 
 sourceMainJava
 {
-    replace(wrapKeys(modinfo))
+    replace(wrapKeys(modprops))
 }
 
 processResources
@@ -59,7 +61,7 @@ processResources
 
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-        expand modinfo
+        expand modprops
     }
 
     from(sourceSets.main.resources.srcDirs) {
