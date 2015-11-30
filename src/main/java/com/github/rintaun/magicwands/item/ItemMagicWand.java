@@ -1,6 +1,7 @@
 package com.github.rintaun.magicwands.item;
 
 import com.github.rintaun.magicwands.MagicWands;
+import com.github.rintaun.magicwands.client.gui.GuiEditWand;
 import com.github.rintaun.magicwands.command.MagicWandsCommandHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -74,7 +75,9 @@ public class ItemMagicWand extends Item
 
     public void doCommandEdit(ItemStack itemStack, World world, EntityPlayer player, String cmdNew)
     {
-
+        MagicWandsCommandHandler commandHandler = new MagicWandsCommandHandler(world, player.getPosition(), this.getPermLevel(itemStack), player, ItemMagicWand.getDataTagCompound(itemStack));
+        commandHandler.setCommand(cmdNew);
+        commandHandler.updateWand(itemStack);
     }
 
     @SubscribeEvent
@@ -101,12 +104,35 @@ public class ItemMagicWand extends Item
         if (playerIn.getEntityWorld().isRemote)
         {
             FMLLog.info("And they're remote to boot!");
+            MagicWandsCommandHandler commandHandler = new MagicWandsCommandHandler(
+                worldIn,
+                playerIn.getPosition(),
+                MagicWandsCommandHandler.getPermLevelForPlayer(playerIn),
+                playerIn,
+                ItemMagicWand.getDataTagCompound(itemStackIn)
+            );
+            Minecraft.getMinecraft().displayGuiScreen(new GuiEditWand(itemStackIn, commandHandler));
         } else {
             FMLLog.info("But they're not remote =(");
         }
     }
 
-    private NBTTagCompound getDataTagCompound(ItemStack wand)
+    @Override
+    public boolean updateItemStackNBT(NBTTagCompound nbt)
+    {
+        NBTTagCompound tag;
+        int[] ench = new int[1];
+        if (!nbt.hasKey("tag")) {
+            tag = new NBTTagCompound();
+        } else {
+            tag = nbt.getCompoundTag("tag");
+        }
+        tag.setIntArray("ench", ench);
+        nbt.setTag("tag", tag);
+        return true;
+    }
+
+    public static NBTTagCompound getDataTagCompound(ItemStack wand)
     {
         NBTTagCompound wandData = new NBTTagCompound();
         wand.writeToNBT(wandData);
@@ -116,11 +142,11 @@ public class ItemMagicWand extends Item
     public boolean useTargetPos(ItemStack wand)
     {
         NBTTagCompound tags = this.getDataTagCompound(wand);
-        if (tags == null || !tags.hasKey("useTargetPos"))
+        if (tags == null || !tags.hasKey("UseTargetPos"))
         {
             return false;
         }
-        return tags.getByte("useTargetPos") == 1;
+        return tags.getByte("UseTargetPos") == 1;
     }
 
     public int getPermLevel(ItemStack wand)

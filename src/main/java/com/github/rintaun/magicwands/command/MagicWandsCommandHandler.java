@@ -22,7 +22,6 @@ public class MagicWandsCommandHandler extends CommandBlockLogic
     private BlockPos pos;
     private NBTTagCompound commandData;
     private Entity sender;
-    private ItemStack wandEditing;
 
     private boolean doChatOutput = false;
     private int perms = 0;
@@ -47,6 +46,7 @@ public class MagicWandsCommandHandler extends CommandBlockLogic
         this.perms = perms;
         this.sender = sender;
         this.commandData = commandData;
+        this.readDataFromNBT(this.commandData);
     }
 
     public NBTTagCompound getCommandData()
@@ -90,7 +90,8 @@ public class MagicWandsCommandHandler extends CommandBlockLogic
 
     public boolean canUseCommand(int permLevel, String commandName)
     {
-        return permLevel < 2;
+        return true;
+        //return permLevel < 2;
         //return permLevel <= this.perms;
     }
 
@@ -123,60 +124,25 @@ public class MagicWandsCommandHandler extends CommandBlockLogic
     }
 
     public void func_145756_e(){}
-
-    /**
-     * public int advCdmPacketType()
-     *
-     * if 0, payload is int X, int Y, int Z
-     * if 1, pa1load is int entityID
-     */
-    @SideOnly(Side.CLIENT)
-    public int func_145751_f()
-    {
-        return 1;
-    }
-
-    @SideOnly(Side.CLIENT)
-    /**
-     * public void fillAdvCdmPayload(ByteBuf advCdmPacket)
-     *
-     * fills the AdvCdm packet payload with either XYZ coords or
-     * the ID of the associated entity
-     *
-     * in our case, fill with the sender id if available
-     */
-    public void func_145757_a(ByteBuf p_145757_1_)
-    {
-        p_145757_1_.writeInt(this.sender.getEntityId());
-    }
-
-    /*
-    public boolean func_175574_a(EntityPlayer player)
-    {
-
-        if (!(this.sender instanceof EntityMagicDummyMinecartCommandBlock))
-        {
-            return false;
-        }
-        return super.func_175574_a(player);
-    }
-    */
+    public int func_145751_f(){ return 2; }
+    public void func_145757_a(ByteBuf packetAdvCdm){}
 
     public void setCommand(String command)
     {
         super.setCommand(command);
-        if (this.wandEditing instanceof ItemStack)
-        {
-            NBTTagCompound wandData = new NBTTagCompound();
-            this.wandEditing.writeToNBT(wandData);
+    }
 
-            NBTTagCompound tag = new NBTTagCompound();
-            this.writeDataToNBT(tag);
+    public void updateWand(ItemStack wand)
+    {
+        NBTTagCompound wandData = new NBTTagCompound();
+        wand.writeToNBT(wandData);
 
-            wandData.setTag("tag", tag);
+        NBTTagCompound tag = new NBTTagCompound();
+        this.writeDataToNBT(tag);
 
-            this.wandEditing.readFromNBT(wandData);
-        }
+        wandData.setTag("tag", tag);
+
+        wand.readFromNBT(wandData);
     }
 
     public Entity getCommandSenderEntity()

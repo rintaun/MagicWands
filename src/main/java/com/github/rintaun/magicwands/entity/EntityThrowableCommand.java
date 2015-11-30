@@ -13,6 +13,7 @@ public class EntityThrowableCommand extends EntityThrowable implements IMagicWan
     private String tickCommand = "";
     private int tickDelay = 0;
     private int tickInterval = 1;
+    private int maxTickExecs = 0;
     private String impactCommand = "";
     private float velocity = 1.5f;
     private float gravity = 0.03f;
@@ -22,6 +23,7 @@ public class EntityThrowableCommand extends EntityThrowable implements IMagicWan
     private float headingZ = 0.0f;
 
     private int ticksSinceStart = 0;
+    private int totalTickExecs = 0;
     private int ticksSinceLast = 0;
     private NBTTagCompound lastCommand;
     private NBTTagCompound currentCommand;
@@ -34,11 +36,13 @@ public class EntityThrowableCommand extends EntityThrowable implements IMagicWan
     public EntityThrowableCommand(World worldIn, EntityLivingBase throwerIn)
     {
         super(worldIn, throwerIn);
+        this.setThrowableHeading(this.motionX, this.motionY, this.motionZ, this.getVelocity(), this.getInaccuracy());
     }
 
     public EntityThrowableCommand(World worldIn, double x, double y, double z)
     {
         super(worldIn, x, y, z);
+        this.setThrowableHeading((double)this.headingX, (double)this.headingY, (double)this.headingZ, this.getVelocity(), this.getInaccuracy());
     }
 
     public boolean delaying()
@@ -70,6 +74,10 @@ public class EntityThrowableCommand extends EntityThrowable implements IMagicWan
             if (this.tickCommandReady())
             {
                 this.ticksSinceLast = 0;
+                this.totalTickExecs++;
+                if (totalTickExecs == maxTickExecs) {
+                    this.setDead();
+                }
                 this.setCurrentCommand(this.tickCommand);
                 this.runCommand();
             }
@@ -101,6 +109,8 @@ public class EntityThrowableCommand extends EntityThrowable implements IMagicWan
     {
         //MagicWandsCommandHandler commandHandler = new MagicWandsCommandHandler(this.worldObj, this.getPosition(), this);
         //commandHandler.execute();
+        MagicWandsCommandHandler commandHandler = new MagicWandsCommandHandler(this.worldObj, this.getPosition(), 2, this, this.getCommandData());
+        commandHandler.execute();
         this.lastCommand = this.currentCommand;
         this.currentCommand = null;
     }
@@ -140,6 +150,7 @@ public class EntityThrowableCommand extends EntityThrowable implements IMagicWan
         userData.setString("impactCommand", this.impactCommand);
         userData.setInteger("tickDelay", this.tickDelay);
         userData.setInteger("tickInterval", this.tickInterval);
+        userData.setInteger("maxTickExecs", this.maxTickExecs);
         userData.setFloat("velocity", this.velocity);
         userData.setFloat("gravity", this.gravity);
         userData.setFloat("inaccuracy", this.inaccuracy);
@@ -168,6 +179,7 @@ public class EntityThrowableCommand extends EntityThrowable implements IMagicWan
             this.impactCommand = userData.getString("impactCommand");
             this.tickDelay = userData.getInteger("tickDelay");
             this.tickInterval = userData.getInteger("tickInterval");
+            this.maxTickExecs = userData.getInteger("maxTickExecs");
             this.velocity = userData.getFloat("velocity");
             this.gravity = userData.getFloat("gravity");
             this.inaccuracy = userData.getFloat("inaccuracy");

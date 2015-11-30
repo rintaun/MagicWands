@@ -36,7 +36,7 @@ public class MagicWandsUpdateMessage implements IMessage
     @Override
     public void fromBytes(ByteBuf buf)
     {
-        this.command = ByteBufUtils.readUTF8String(buf);
+        this.setCommand(ByteBufUtils.readUTF8String(buf));
     }
 
     @Override
