@@ -1,7 +1,6 @@
-package com.github.rintaun.magicwands.common;
+package com.github.rintaun.magicwands;
 
-import com.github.rintaun.magicwands.common.entity.EntityMagicDummyMinecartCommandBlock;
-import com.github.rintaun.magicwands.common.entity.EntityThrowableCommand;
+import com.github.rintaun.magicwands.entity.EntityThrowableCommand;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -26,9 +25,6 @@ public class CommonProxyWands
     private void registerEntities()
     {
         int nextId = EntityRegistry.findGlobalUniqueEntityId();
-        EntityRegistry.registerGlobalEntityID(EntityMagicDummyMinecartCommandBlock.class, "MagicDummyMinecartCommandBlock", nextId);
-
-        nextId = EntityRegistry.findGlobalUniqueEntityId();
         EntityRegistry.registerGlobalEntityID(EntityThrowableCommand.class, "ThrowableCommand", nextId);
     }
 

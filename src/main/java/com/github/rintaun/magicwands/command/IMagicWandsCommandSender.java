@@ -1,4 +1,4 @@
-package com.github.rintaun.magicwands.common.command;
+package com.github.rintaun.magicwands.command;
 
 import net.minecraft.command.ICommandSender;
 import net.minecraft.nbt.NBTTagCompound;

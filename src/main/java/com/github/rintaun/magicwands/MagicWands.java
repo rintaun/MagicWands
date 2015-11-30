@@ -1,6 +1,7 @@
-package com.github.rintaun.magicwands.common;
+package com.github.rintaun.magicwands;
 
-import com.github.rintaun.magicwands.common.item.ItemMagicWand;
+import com.github.rintaun.magicwands.item.ItemMagicWand;
+import com.github.rintaun.magicwands.network.MagicWandsUpdateMessage;
 
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.Item;
@@ -12,8 +13,11 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.LanguageRegistry;
+import net.minecraftforge.fml.relauncher.Side;
 
 @Mod(modid = MagicWands.MOD_ID, name = MagicWands.MOD_NAME, version = MagicWands.MOD_VER)
 public class MagicWands
@@ -24,6 +28,11 @@ public class MagicWands
 
     public static Item magicWand = new ItemMagicWand();
     public static KeyBinding wandEdit;
+    public static SimpleNetworkWrapper network;
+
+    static class Messages {
+        public static final int UPDATEWAND = 0;
+    }
 
     @SidedProxy(
         clientSide = "com.github.rintaun.magicwands.client.ClientProxyWands",
@@ -34,6 +43,9 @@ public class MagicWands
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
+        MagicWands.network = NetworkRegistry.INSTANCE.newSimpleChannel(MOD_ID);
+        network.registerMessage(MagicWandsUpdateMessage.Handler.class, MagicWandsUpdateMessage.class, Messages.UPDATEWAND, Side.SERVER);
+
         proxy.preInit(event);
     }
 

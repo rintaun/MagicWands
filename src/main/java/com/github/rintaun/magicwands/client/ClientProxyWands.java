@@ -1,8 +1,8 @@
 package com.github.rintaun.magicwands.client;
 
-import com.github.rintaun.magicwands.common.MagicWands;
-import com.github.rintaun.magicwands.common.CommonProxyWands;
-import com.github.rintaun.magicwands.common.item.ItemMagicWand;
+import com.github.rintaun.magicwands.MagicWands;
+import com.github.rintaun.magicwands.CommonProxyWands;
+import com.github.rintaun.magicwands.item.ItemMagicWand;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.entity.RenderManager;

@@ -1,4 +1,4 @@
-package com.github.rintaun.magicwands.server.command;
+package com.github.rintaun.magicwands.command;
 
 import com.google.common.collect.Lists;
 import java.util.ArrayList;

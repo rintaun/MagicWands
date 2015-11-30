@@ -1,7 +1,7 @@
-package com.github.rintaun.magicwands.common.entity;
+package com.github.rintaun.magicwands.entity;
 
-import com.github.rintaun.magicwands.common.command.IMagicWandsCommandSender;
-import com.github.rintaun.magicwands.common.command.MagicWandsCommandHandler;
+import com.github.rintaun.magicwands.command.IMagicWandsCommandSender;
+import com.github.rintaun.magicwands.command.MagicWandsCommandHandler;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.nbt.NBTTagCompound;
@@ -99,8 +99,8 @@ public class EntityThrowableCommand extends EntityThrowable implements IMagicWan
 
     public void runCommand()
     {
-        MagicWandsCommandHandler commandHandler = new MagicWandsCommandHandler(this.worldObj, this.getPosition(), this);
-        commandHandler.execute();
+        //MagicWandsCommandHandler commandHandler = new MagicWandsCommandHandler(this.worldObj, this.getPosition(), this);
+        //commandHandler.execute();
         this.lastCommand = this.currentCommand;
         this.currentCommand = null;
     }

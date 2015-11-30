@@ -1,8 +1,7 @@
-package com.github.rintaun.magicwands.common.item;
+package com.github.rintaun.magicwands.item;
 
-import com.github.rintaun.magicwands.common.MagicWands;
-import com.github.rintaun.magicwands.common.command.MagicWandsCommandHandler;
-import com.github.rintaun.magicwands.common.entity.EntityMagicDummyMinecartCommandBlock;
+import com.github.rintaun.magicwands.MagicWands;
+import com.github.rintaun.magicwands.command.MagicWandsCommandHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.EntityLivingBase;
@@ -73,6 +72,11 @@ public class ItemMagicWand extends Item
         return itemStackIn;
     }
 
+    public void doCommandEdit(ItemStack itemStack, World world, EntityPlayer player, String cmdNew)
+    {
+
+    }
+
     @SubscribeEvent
     public void onKeyInput(InputEvent.KeyInputEvent event) {
         if (!MagicWands.wandEdit.isPressed()) { return; }
@@ -97,11 +101,6 @@ public class ItemMagicWand extends Item
         if (playerIn.getEntityWorld().isRemote)
         {
             FMLLog.info("And they're remote to boot!");
-            EntityMagicDummyMinecartCommandBlock dummy = new EntityMagicDummyMinecartCommandBlock(worldIn);
-            MagicWandsCommandHandler commandHandler = new MagicWandsCommandHandler(worldIn, playerIn.getPosition(), itemStackIn, dummy, playerIn, this.getDataTagCompound(itemStackIn));
-
-            dummy.setCommandBlockLogic(commandHandler);
-            commandHandler.func_175574_a(playerIn);
         } else {
             FMLLog.info("But they're not remote =(");
         }

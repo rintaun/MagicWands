@@ -1,7 +1,6 @@
-package com.github.rintaun.magicwands.common.command;
+package com.github.rintaun.magicwands.command;
 
-import com.github.rintaun.magicwands.common.entity.EntityMagicDummyMinecartCommandBlock;
-import com.github.rintaun.magicwands.common.entity.EntityThrowableCommand;
+import com.github.rintaun.magicwands.entity.EntityThrowableCommand;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.command.server.CommandBlockLogic;
 import net.minecraft.entity.Entity;
@@ -23,7 +22,6 @@ public class MagicWandsCommandHandler extends CommandBlockLogic
     private BlockPos pos;
     private NBTTagCompound commandData;
     private Entity sender;
-    private EntityMagicDummyMinecartCommandBlock dummy;
     private ItemStack wandEditing;
 
     private boolean doChatOutput = false;
@@ -33,18 +31,6 @@ public class MagicWandsCommandHandler extends CommandBlockLogic
     public MagicWandsCommandHandler(World world, BlockPos pos, int perms, Entity sender, NBTTagCompound commandData)
     {
         this.setup(world, pos, perms, sender, commandData);
-    }
-
-    public MagicWandsCommandHandler(World world, BlockPos pos, EntityThrowableCommand sender)
-    {
-        this.setup(world, pos, 2, sender, sender.getCommandData());
-    }
-
-    public MagicWandsCommandHandler(World world, BlockPos pos, ItemStack wand, EntityMagicDummyMinecartCommandBlock dummy, EntityPlayer player, NBTTagCompound commandData)
-    {
-        this.canExecute = false;
-        this.wandEditing = wand;
-        this.setup(world, pos, MagicWandsCommandHandler.getPermLevelForPlayer(player), dummy, commandData);
     }
 
     /*
@@ -104,7 +90,8 @@ public class MagicWandsCommandHandler extends CommandBlockLogic
 
     public boolean canUseCommand(int permLevel, String commandName)
     {
-        return permLevel <= this.perms;
+        return permLevel < 2;
+        //return permLevel <= this.perms;
     }
 
     public void execute()
@@ -163,18 +150,17 @@ public class MagicWandsCommandHandler extends CommandBlockLogic
         p_145757_1_.writeInt(this.sender.getEntityId());
     }
 
+    /*
     public boolean func_175574_a(EntityPlayer player)
     {
-        if (!(this.sender instanceof EntityMagicDummyMinecartCommandBlock) || !player.canUseCommand(this.perms, "@"))
+
+        if (!(this.sender instanceof EntityMagicDummyMinecartCommandBlock))
         {
             return false;
         }
-        else
-        {
-            player.openEditCommandBlock(this);
-            return true;
-        }
+        return super.func_175574_a(player);
     }
+    */
 
     public void setCommand(String command)
     {
